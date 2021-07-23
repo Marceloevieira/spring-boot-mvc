@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div class="col">
+            <div class="card text-center">
+                <div class="card-header">
+                    <div class="alert" role="alert" th:if="${message}" th:utext="${message}"  th:classappend="${alert}" />
+                    <h1 th:text=" ${name}  " />
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a class="btn btn-primary me-md-2" type="button" th:href="@{/person/create}">Create</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Age</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="person : ${pagePersonDTO.getContent()} ">
+                            <th scope="row" th:text="${person.getId()}"/>
+                            <td th:text="${person.getName()}"/>
+                            <td th:text="${person.getAge()}"/>
+                            <td >
+                                <a class="btn btn-secondary"  role="button" th:href="@{/person/edit/{id}(id=${person.getId()})}"><i class="fas fa-pencil-alt"></i></a>
+
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="${'#modal-'+person.getId()}">
+                                    <i class="fas fa-trash"></i>
+                                 </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" th:id="${'modal-'+person.getId()}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"  aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" >Confirmar exclusão?</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col">Name</div>
+                                                        <div class="col" th:text="${person.getName()}"/>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <form class="form" th:action="@{/person/delete/{id}(id=${person.getId()})}"  method="post">
+                                                    <button type="submit" class="btn btn-primary">Confirm</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <nav aria-label="Page navigation example"  >
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${pagePersonDTO.isFirst()} ? disabled" >
+                                <a class="page-link"  th:href="@{/person/?(page=${pagePersonDTO.getNumber()},size=${pagePersonDTO.getSize()} )}" tabindex="-1" >Previous</a>
+                            </li>
+                            <th:block th:each="pageNumber : ${pageNumbers}">
+                                <li class="page-item" th:classappend="${pageNumber == pagePersonDTO.getNumber()+1 ? 'active' : ''}">
+                                    <a class="page-link" th:href="@{/person/?(page=${pageNumber},size=${pagePersonDTO.getSize()} )}" th:text=${pageNumber} />
+                                </li>
+                            </th:block>
+                            <li class="page-item" th:classappend="${pagePersonDTO.isLast()} ? disabled">
+                                <a class="page-link" th:href="@{/person/?(page=${pagePersonDTO.getNumber()+2},size=${pagePersonDTO.getSize()} )}">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
