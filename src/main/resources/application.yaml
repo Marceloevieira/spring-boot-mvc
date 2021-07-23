@@ -9,7 +9,3 @@ spring:
     console:
       enabled: true
 
-
-java:
-  runtime:
-    version:11
