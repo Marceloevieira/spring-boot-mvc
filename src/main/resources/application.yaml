@@ -8,3 +8,8 @@ spring:
   h2:
     console:
       enabled: true
+
+
+java:
+  runtime:
+    version:11
