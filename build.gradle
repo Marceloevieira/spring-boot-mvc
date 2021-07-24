@@ -6,9 +6,7 @@ plugins {
 
 jar {
 	manifest {
-		attributes(
-				'Main-Class': 'com.example.springbootmvc.SpringBootMvcApplication'
-		)
+		attributes 'Main-Class': 'com.example.springbootmvc.SpringBootMvcApplication'
 	}
 }
 
